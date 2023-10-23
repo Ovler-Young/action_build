@@ -1,4 +1,4 @@
-name: Build_mt7981_q30
+name: Build_mt7981_ax3000
 
 on: 
   repository_dispatch:
@@ -63,7 +63,7 @@ jobs:
               
     - name: Configuration Customization - Build_mt7981_q30
       env:
-        CONFIG_FILE: './mt7981_q30.config'
+        CONFIG_FILE: './mt7981_ax3000.config'
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cd openwrt && make defconfig
