@@ -1,25 +1,23 @@
 name: Build_mt7981_ax3000
 
-on: 
-  repository_dispatch:
+on:
   workflow_dispatch:
+    inputs:
+      manual:
+        description: '手动触发一次编译'
 
 # 定时触发编译
 # schedule:
 #   - cron: 17 22 * * 4
 
-# 点赞☆Star触发编译
-#  watch:
-#    types: [started]
-
 jobs:
   Build_mt7981:
     runs-on: ubuntu-20.04
     steps:
-    - name: Clone Repository
+    - name: 检查项目分支
       uses: actions/checkout@v3
 
-    - name: Initialization environment
+    - name: 安装编译环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -39,7 +37,7 @@ jobs:
         git config --global user.name 'GitHub Actions' && git config --global user.email 'noreply@github.com'
         df -h
         
-    - name: Clone source code
+    - name: 下载固件源码
       env: 
         REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
         REPO_BRANCH: openwrt-21.02
@@ -49,7 +47,7 @@ jobs:
 #       cp -f ../diy/mt798x/op1.sh ./
 #       chmod +x ./op1.sh && ./op1.sh
 
-    - name: Update & Install feeds
+    - name: 安装并更新插件
       working-directory: ./openwrt
       run: |
         ./scripts/feeds update -a
@@ -61,21 +59,21 @@ jobs:
 
 #       sed -i "s/DISTRIB_DESCRIPTION='*.*'/DISTRIB_DESCRIPTION='AE86Wrt-JCG-Q30Pro-$(date +%Y%m%d)'/g"  package/base-files/files/etc/openwrt_release
               
-    - name: Configuration Customization - Build_mt7981
+    - name: 加载.config
       env:
         CONFIG_FILE: '2.config'
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cd openwrt && make defconfig
         
-    - name: Download package
+    - name: 下载依赖
       working-directory: ./openwrt
       run: |
         make download -j$(nproc)
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: Build firmware
+    - name: 开始编译固件
       working-directory: ./openwrt
       run: |
         make -j$(nproc) V=s
@@ -97,25 +95,25 @@ jobs:
 #        getmd5 $rom        
 #        cp -a $rom ./ARM_Out/AE86Wrt-JCG-Q30Pro-5.4-$(date +%Y%m%d)_${md5}.bin
                
-    - name: Upload Firmwares
+    - name: 上传固件到actions
       uses: actions/upload-artifact@main
       with:
         name: OpenWrt
         path: openwrt/bin/targets/mediatek/mt7981/*.bin
 
-    - name: Upload config
-      uses: actions/upload-artifact@main
-      with:
-        name: config
-        path: openwrt/.config
+#    - name: Upload config
+#      uses: actions/upload-artifact@main
+#      with:
+#        name: config
+#        path: openwrt/.config
 
-    - name: Upload Packages
-      uses: actions/upload-artifact@main
-      with:
-        name: Packages
-        path: openwrt/bin/packages
+#    - name: Upload Packages
+#      uses: actions/upload-artifact@main
+#      with:
+#        name: Packages
+#        path: openwrt/bin/packages
         
-    - name: Generate Tag & Release Name
+    - name: 改Tag
       id: generate_name
       run: |
         time=$(date +%Y%m%d%H%M%S)
@@ -124,7 +122,7 @@ jobs:
         echo "release_name=$release_name" >> $GITHUB_OUTPUT
         echo "release_tag=$release_tag" >> $GITHUB_OUTPUT      
 
-    - name: Create Release & Upload
+    - name: 上传固件到Release
       uses: ncipollo/release-action@v1
       with:
         artifacts: openwrt/bin/targets/mediatek/mt7981/*.bin
@@ -139,5 +137,3 @@ jobs:
 #        jar cf JCG-Q30Pro-5.4-$(date +%Y%m%d).zip *
 #        cd ..    
 #        python diy/aliupload.py --token "${{ secrets.ALIYUN_TOKEN }}" --uploadFloder "OpenWrt/MT798x/Q30Pro/5.4" --file "ARM_Out/JCG-Q30Pro-5.4-$(date +%Y%m%d).zip"  
-       
-                               
