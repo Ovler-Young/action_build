@@ -5,7 +5,15 @@ on:
     inputs:
       manual:
         description: '手动触发一次编译'
-
+env:
+  REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
+  REPO_BRANCH: openwrt-21.02
+  CONFIG_FILE: .config
+  DIY_P1_SH: diy/diy-5.15.sh
+  DIY_P2_SH: diy/diy02.sh
+  UPLOAD_FIRMWARE: true
+  TZ: Asia/Shanghai
+  
 # 定时触发编译
 # schedule:
 #   - cron: 17 22 * * 4
@@ -38,9 +46,6 @@ jobs:
         df -h
         
     - name: 下载固件源码
-      env: 
-        REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
-        REPO_BRANCH: openwrt-21.02
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 #        cd openwrt
@@ -52,16 +57,17 @@ jobs:
       run: |
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        
-        #改默认ip        
-        sed -i 's/192.168.1.1/192.168.2.1/g' ./openwrt/package/base-files/files/bin/config_generate
+
+    - name: 更改设置（DIY2）
+      run: |
+        chmod +x $DIY_P2_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P2_SH        
 
 #       cp -f ../diy/mt798x/op2.sh ./        
 #       chmod +x ./op2.sh && ./op2.sh      
              
     - name: 加载.config
-      env:
-        CONFIG_FILE: '2.config'
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cd openwrt && make defconfig
