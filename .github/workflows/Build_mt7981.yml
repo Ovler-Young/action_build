@@ -32,9 +32,9 @@ jobs:
         [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         sudo -E apt-get update -y
         sudo -E apt-get install -y ack antlr3 aria2 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3.8 python3-pip libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev libfuse-dev libfuse-dev python3-setuptools
-        pip install aligo
+        #pip install aligo
         sudo -E apt-get clean
-        git config --global user.name 'GitHub Actions' && git config --global user.email 'noreply@github.com'
+        #git config --global user.name 'GitHub Actions' && git config --global user.email 'noreply@github.com'
         df -h
         
     - name: 下载固件源码
@@ -51,14 +51,14 @@ jobs:
       working-directory: ./openwrt
       run: |
         ./scripts/feeds update -a
-
         ./scripts/feeds install -a
+        
+        #改默认ip        
+        sed -i 's/192.168.1.1/192.168.2.1/g' openwrt/package/base-files/files/bin/config_generate
 
 #       cp -f ../diy/mt798x/op2.sh ./        
 #       chmod +x ./op2.sh && ./op2.sh      
-
-#       sed -i "s/DISTRIB_DESCRIPTION='*.*'/DISTRIB_DESCRIPTION='AE86Wrt-JCG-Q30Pro-$(date +%Y%m%d)'/g"  package/base-files/files/etc/openwrt_release
-              
+             
     - name: 加载.config
       env:
         CONFIG_FILE: '2.config'
