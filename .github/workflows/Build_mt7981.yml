@@ -43,7 +43,7 @@ jobs:
         REPO_BRANCH: openwrt-21.02
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-        cd openwrt
+#        cd openwrt
 #       cp -f ../diy/mt798x/op1.sh ./
 #       chmod +x ./op1.sh && ./op1.sh
 
@@ -54,7 +54,7 @@ jobs:
         ./scripts/feeds install -a
         
         #改默认ip        
-        sed -i 's/192.168.1.1/192.168.2.1/g' openwrt/package/base-files/files/bin/config_generate
+        sed -i 's/192.168.1.1/192.168.2.1/g' ./openwrt/package/base-files/files/bin/config_generate
 
 #       cp -f ../diy/mt798x/op2.sh ./        
 #       chmod +x ./op2.sh && ./op2.sh      
