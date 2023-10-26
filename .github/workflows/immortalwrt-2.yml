@@ -95,7 +95,7 @@ jobs:
         rm -rf packages
         rm -rf feeds.buildinfo
         rm -rf version.buildinfo
-        #rm -rf *kernel.bin
+        rm -rf *kernel.bin
         rm -rf profiles.json
         rm -rf *rootfs.img
         rm -rf *.manifest
