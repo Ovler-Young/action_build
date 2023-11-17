@@ -1,4 +1,4 @@
-name: Build_mt7981_ax3000
+name: Build_mt7981_asr3000
 
 on:
   workflow_dispatch:
@@ -97,12 +97,14 @@ jobs:
       working-directory: ./openwrt
       run: |
         make -j$(nproc) V=s
+        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
        
               
     - name: 上传固件到actions
       uses: actions/upload-artifact@main
       with:
-        name: immortalwrt
+        #name: $(date +%Y%m%d)
+        name: ${{ env.FILE_DATE }}
         path: openwrt/bin/targets/mediatek/mt7981/*.bin
 
 #    - name: Upload config
