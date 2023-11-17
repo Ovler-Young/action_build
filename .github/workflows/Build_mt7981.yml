@@ -98,7 +98,21 @@ jobs:
       run: |
         make -j$(nproc) V=s
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-       
+        
+    - name: 整理固件
+      id: organize
+      run: |
+        cd openwrt/bin/targets/*/*
+        # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间
+        rm -rf packages
+        rm -rf feeds.buildinfo
+        rm -rf version.buildinfo
+        rm -rf *kernel.bin
+        rm -rf profiles.json
+        rm -rf *rootfs.img
+        rm -rf *.manifest
+        rm -rf sha256sums
+        
               
     - name: 上传固件到actions
       uses: actions/upload-artifact@main
