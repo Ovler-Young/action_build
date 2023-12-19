@@ -4,8 +4,8 @@ on:
     workflow_dispatch:
 
 env:
-    CLONE_COMMAND: git clone -b mt7981 --depth 1 https://github.com/padavanonly/immortalwrtARM
-    REPO_NAME: immortalwrtARM
+    CLONE_COMMAND: git clone -b mt7981 --depth 1 https://github.com/hanwckf/immortalwrt-mt798x
+    REPO_NAME: immortalwrt-mt798x
 
 jobs:
     build:
@@ -17,17 +17,17 @@ jobs:
             - name: Backup config
               run: |
                   mkdir -p backup_config
-                  cp .config feeds.conf.default diy.sh backup_config/
+                  cp .config feeds.conf.default diy-part4.sh backup_config/
                   echo "md5"
                   md5sum .config
 
-            - name: Clone immortalwrtARM repo
+            - name: Clone immortalwrt repo
               run: |
                   $CLONE_COMMAND
                   cp -rn $REPO_NAME/* .
                   rm -rf $REPO_NAME
 
-            - name: Get the dependency of immortalwrtARM
+            - name: Get the dependency of immortalwrt
               run: |
                   chmod +x diy.sh
                   ./diy.sh
