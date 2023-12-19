@@ -67,9 +67,9 @@ jobs:
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF ImmortalWrt/feeds.conf.default
-        chmod +x $DIY_P1_SH
-        cd ImmortalWrt
-        $GITHUB_WORKSPACE/$DIY_P1_SH
+        #chmod +x $DIY_P1_SH
+        #cd ImmortalWrt
+        #$GITHUB_WORKSPACE/$DIY_P1_SH
 
     - name: Update feeds
       run: cd ImmortalWrt && ./scripts/feeds update -a
@@ -141,10 +141,10 @@ jobs:
         echo "- squashfs-sysupgrade.bin" >> release.txt
         echo "  360T7-md5: $(md5sum ${{ env.FIRMWARE }}/*abt_asr3000*sysupgrade.bin | cut -d" " -f1)" >> release.txt
         echo "  360T7-sha256: $(grep ".*abt_asr3000.*sysupgrade.bin" ${{ env.FIRMWARE }}/sha256sums | grep -oE "\w{64}")" >> release.txt
-        echo "  WR30U-112m-md5: $(md5sum ${{ env.FIRMWARE }}/*112m*sysupgrade.bin | cut -d" " -f1)" >> release.txt
-        echo "  WR30U-112m-sha256: $(grep ".*112m.*sysupgrade.bin" ${{ env.FIRMWARE }}/sha256sums | grep -oE "\w{64}")" >> release.txt
-        echo "  WR30U-stock-md5: $(md5sum ${{ env.FIRMWARE }}/*stock*sysupgrade.bin | cut -d" " -f1)" >> release.txt
-        echo "  WR30U-stock-sha256: $(grep ".*stock.*sysupgrade.bin" ${{ env.FIRMWARE }}/sha256sums | grep -oE "\w{64}")" >> release.txt
+        #echo "  WR30U-112m-md5: $(md5sum ${{ env.FIRMWARE }}/*112m*sysupgrade.bin | cut -d" " -f1)" >> release.txt
+        #echo "  WR30U-112m-sha256: $(grep ".*112m.*sysupgrade.bin" ${{ env.FIRMWARE }}/sha256sums | grep -oE "\w{64}")" >> release.txt
+        #echo "  WR30U-stock-md5: $(md5sum ${{ env.FIRMWARE }}/*stock*sysupgrade.bin | cut -d" " -f1)" >> release.txt
+        #echo "  WR30U-stock-sha256: $(grep ".*stock.*sysupgrade.bin" ${{ env.FIRMWARE }}/sha256sums | grep -oE "\w{64}")" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload firmware to release
