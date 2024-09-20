@@ -37,7 +37,11 @@ jobs:
               with:
                   name: config before build
                   path: .config
-
+            - uses: klever1988/cachewrtbuild@main
+              with:
+                ccache: 'true'
+                mixkey: 'ramips'
+                prefix: 'openwrt'
             - name: Build immortalwrtARM
               run: |
                   cd $REPO_NAME
