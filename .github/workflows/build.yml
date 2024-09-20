@@ -41,7 +41,7 @@ jobs:
               with:
                 ccache: 'true'
                 mixkey: 'ramips'
-                prefix: 'openwrt'
+                prefix: 'immortalwrt-mt798x'
             - name: Build immortalwrtARM
               run: |
                   cd $REPO_NAME
