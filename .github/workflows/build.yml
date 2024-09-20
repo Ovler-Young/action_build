@@ -26,13 +26,11 @@ jobs:
             - name: Get the dependency of immortalwrtARM
               run: |
                   cd $REPO_NAME
-                  chmod +x diy-part4.sh
-                  ./diy-part4.sh
                   ./scripts/feeds update -a && ./scripts/feeds install -a
 
             - name: Copy config to source code
               run: |
-                  cp -f .config feeds.conf.default diy-part4.sh $REPO_NAME/
+                  cp -f .config feeds.conf.default $REPO_NAME/
 
             - name: Upload config before build
               uses: actions/upload-artifact@v3
