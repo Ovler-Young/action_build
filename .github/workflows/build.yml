@@ -45,7 +45,7 @@ jobs:
             - name: Build immortalwrtARM
               run: |
                   cd $REPO_NAME
-                  make -j$(nproc) V=99
+                  make -j$(nproc)
                   pwd
                   ls
 # 默认make -j$(nproc)，代表多线程编译。如果求稳想看报错信息，可以使用make -j1 V=99代替
